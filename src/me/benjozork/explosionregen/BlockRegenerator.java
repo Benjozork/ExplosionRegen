@@ -1,6 +1,5 @@
 package me.benjozork.explosionregen;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -107,5 +106,9 @@ public class BlockRegenerator {
         b.setType(blocks.get(explosionCount).get(l));
 
         explosionCount++;
+    }
+
+    public int getRemainingExplosions() {
+        return blockLocations.size();
     }
 }

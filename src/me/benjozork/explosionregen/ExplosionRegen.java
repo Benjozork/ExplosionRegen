@@ -4,11 +4,10 @@ import me.benjozork.explosionregen.listeners.ExplosionListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -93,8 +92,27 @@ public class ExplosionRegen extends JavaPlugin {
 
             @Override
             public void run() {
-                regenerator.regenerateNextBlocks();
-                System.out.println(speed);
+                List<Integer> divisorTable10 = Arrays.asList(2, 4, 6, 8, 10, 12, 14, 16, 18, 20);
+                List<Integer> divisorTable5 = Arrays.asList(4, 8, 12, 16, 20);
+                List<Integer> divisorTable4 = Arrays.asList(5, 10, 15, 20);
+                List<Integer> divisorTable2 = Arrays.asList(10, 20);
+
+                tickCount++;
+                if (tickCount > 20) tickCount = 0;
+                if (speed != getSpeed(new int[]{1,2,4,5,10,20}, regenerator.getRemainingExplosions())) speed = getSpeed(new int[]{1,2,4,5,10,20}, regenerator.getRemainingExplosions());
+                if (speed == 1) {
+                    if (tickCount == 1) regenerator.regenerateNextBlocks();
+                } else if (speed == 2) {
+                    if  (divisorTable2.contains(tickCount)) regenerator.regenerateNextBlocks();
+                } else if (speed == 4) {
+                    if (divisorTable4.contains(tickCount)) regenerator.regenerateNextBlocks();
+                } else if (speed == 5) {
+                    if (divisorTable5.contains(tickCount)) regenerator.regenerateNextBlocks();
+                } else if (speed == 10) {
+                    if (divisorTable10.contains(tickCount)) regenerator.regenerateNextBlocks();
+                } else if (speed == 20) {
+                    regenerator.regenerateNextBlocks();
+                }
             }
 
         }, 0, 1);
@@ -102,10 +120,20 @@ public class ExplosionRegen extends JavaPlugin {
 
     public void registerExplosion(List<Material> lm, List<Location> ll) {
         explosion_buffer.add(ll);
-        explosion_buffer_time.put(ll, getConfig().getInt("delay") * 20);
+        explosion_buffer_time.put(ll, getConfig().getInt("delay"));
         explosion_buffer_material.put(ll, lm);
-        if (explosion_buffer.size() > 1 && speed > 6) {
-            speed = speed - 10;
+    }
+
+    public int getSpeed(int[] array, int input) {
+        int lowestDiff = Integer.MAX_VALUE;
+        int result = 0;
+        for (int i : array) {
+            int diff = Math.abs(input - i);
+            if (diff < lowestDiff) {
+                lowestDiff = diff;
+                result = i;
+            }
         }
+        return result;
     }
 }
