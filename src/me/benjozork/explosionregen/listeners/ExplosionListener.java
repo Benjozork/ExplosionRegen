@@ -1,10 +1,11 @@
 package me.benjozork.explosionregen.listeners;
 
+import me.benjozork.explosionregen.ExplosionRegen;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import me.benjozork.explosionregen.ExplosionRegen;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
