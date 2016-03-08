@@ -2,9 +2,7 @@ package me.benjozork.explosionregen.listeners;
 
 import me.benjozork.explosionregen.ExplosionRegen;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
+
 
 /**
  Looks like you decompiled my code :) Don't worry, you have to right to do so.
@@ -57,6 +56,10 @@ public class ExplosionListener implements Listener {
                 if (b.getType().equals(m)) itb.remove();
             }
         }
+
+        Collections.sort(blocks, (b1, b2) -> {
+            return b1.getY() - b2.getY(); // Ascending
+        });
 
         List<Material> materials = new ArrayList<>();
         List<Location> locations = new ArrayList<>();
